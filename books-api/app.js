@@ -1,37 +1,31 @@
+//Import Express and Body-Parser
 const express = require('express');
-const bodyParser = require("body-parset=r");
+const bodyParser = require("body-parser");
 
+//Instantiate the Express application
 const app = express();
 
+//Set the port number
 const port = 3000;
 
+// In-memory Book Data
 let books = [
     { id: 1, title: 'The Lord of the Rings', author: 'J.R.R. Tolkien' },
     { id: 2, title: 'Pride and Prejudice', author: 'Jane Austen' },
-];
+ ];
 
 // parse incoming JSON data in requests
 app.use(express.json())
 // Configure body-parser to handle URL-encoded form data
 app.use(bodyParser.urlencoded({ extended: true })); // Set extended: true for nested objects
 
-
-//route to get books , define route for retrive all books 
+// GET books - Retrieve all Books
 app.get('/books', (req, res) => {
     res.json(books); // Send the array of books as JSON response
  });
 
-
- //define a route to create new book 
- app.post('/books', (req, res) => { 
-    const newBook = req.body; // Get the new book data from the request body
-    newBook.id = books.length + 1; // Assign a unique ID
-    books.push(newBook); // Add the new book to the array
-    res.status(201).json(newBook); // Send created book with status code 201
-   });
-
-
-   app.get('/books/:id', (req, res) => {
+ // GET books - Retrieve Book by ID
+ app.get('/books/:id', (req, res) => {
     const bookId = parseInt(req.params.id); // Get book ID from URL parameter
     const book = books.find(book => book.id === bookId);
   
@@ -42,39 +36,45 @@ app.get('/books', (req, res) => {
     }
     });
 
+ // POST books - Create a new book
+ app.post('/books', (req, res) => {
+    const newBook = req.body; // Get the new book data from the request body
+    newBook.id = books.length + 1; // Assign a unique ID
+    books.push(newBook); // Add the new book to the array
+    res.status(201).json(newBook); // Send created book with status code 201
+   });
 
+// PUT books - Update a book
+app.put('/books/:id', (req, res) => {
+    const bookId = parseInt(req.params.id); // Get book ID from URL parameter
+    const updatedBook = req.body; // Get updated book data from request body
+  
+    const bookIndex = books.findIndex(book => book.id === bookId);
+  
+    if (bookIndex !== -1) {
+      updatedBook.id = bookId;
+      books[bookIndex] = updatedBook; // Update book data in the array
+      res.json(updatedBook); // Send updated book data
+    } else {
+      res.status(404).send('Book not found'); // Send error for non-existent book
+    }
+  });
 
-    app.put('/books/:id', (req, res) => {
-        const bookId = parseInt(req.params.id); // Get book ID from URL parameter
-        const updatedBook = req.body; // Get updated book data from request body
-      
-        const bookIndex = books.findIndex(book => book.id === bookId);
-      
-        if (bookIndex !== -1) {
-          updatedBook.id = bookId;
-          books[bookIndex] = updatedBook; // Update book data in the array
-          res.json(updatedBook); // Send updated book data
-        } else {
-          res.status(404).send('Book not found'); // Send error for non-existent book
-        }
-      });
+// DELETE books - Delete a book
+app.delete('/books/:id', (req, res) => {
+    const bookId = parseInt(req.params.id); // Get book ID from URL parameter
+  
+    const bookIndex = books.findIndex(book => book.id === bookId);
+  
+    if (bookIndex !== -1) {
+      books.splice(bookIndex, 1); // Remove book from the array
+      res.status(204).send(); // Send empty response with status code 204 (No Content)
+    } else {
+      res.status(404).send('Book not found'); // Send error for non-existent book
+    }
+  });
 
-
-      app.delete('/books/:id', (req, res) => {
-        const bookId = parseInt(req.params.id); // Get book ID from URL parameter
-      
-        const bookIndex = books.findIndex(book => book.id === bookId);
-      
-        if (bookIndex !== -1) {
-          books.splice(bookIndex, 1); // Remove book from the array
-          res.status(204).send(); // Send empty response with status code 204 (No Content)
-        } else {
-          res.status(404).send('Book not found'); // Send error for non-existent book
-        }
-      });
-
-//to start the server 
-      app.listen(port, () => {
-        console.log(`Server listening on port ${port}`);
-     });
-
+//Start the server
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
