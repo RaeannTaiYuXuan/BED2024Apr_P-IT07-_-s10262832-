@@ -111,7 +111,7 @@ const allBooks = Book.getAllBooks();
 
 **References for Static Methods:**
 
-- **MDN Web Docs - Static:** [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static) provides a comprehensive explanation of static methods in JavaScript, including syntax, usage scenarios, and differences from regular methods.
+- **MDN Web Docs - Static:** [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static) provides a comprehensive explanation of static methods in JavaScript, including syntax, usage scenarios, and dif  ferences from regular methods.
 - **JavaScript.info - Classes:** [https://javascript.info/classes](https://javascript.info/classes) offers an interactive tutorial on JavaScript classes, where it touches upon static methods and their use cases.
 
 **module.exports:**
